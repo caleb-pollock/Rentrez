@@ -1,0 +1,66 @@
+---
+title: "Analysis"
+author: "Caleb Pollock"
+date: '2023-02-16'
+output: html_document
+---
+
+```{r}
+library(dplyr)
+
+# Import the Sequences.csv file
+SeqDat <- read.csv("Sequences.csv")
+```
+
+```{r}
+# Print out each Sequence
+print(SeqDat$Sequence[1])
+print(SeqDat$Sequence[2])
+print(SeqDat$Sequence[3])
+```
+
+```{r}
+# Count the number of each base pair
+
+# Function to count nucleotides, sequence data goes into function, nchar counts the length of a given character, and gsub feeds the given character to nchar replacing the character with whitespace.
+
+NucCount <- function(SeqDat) {
+  Gc <- nchar(gsub("[^G]","",SeqDat))
+  Cc <- nchar(gsub("[^C]","",SeqDat))
+  Ac <- nchar(gsub("[^A]","",SeqDat))
+  Tc <- nchar(gsub("[^T]","",SeqDat))
+  return(data.frame(ACount= Ac, TCount = Tc, CCount = Cc, GCount = Gc))
+}
+
+# Take the names out of the SeqDat and cbind them to the dataframe the function produces
+
+Names <- SeqDat$Name
+
+# Creates the Sequence name and removes the extra words. Captures the > symbol and moves until the .1
+SequenceIDFlawed <- gsub("^>(\\w+).*", "\\1", Names)
+
+# Append back the .1 because the above removed it
+SeqID <- paste(SequenceIDFlawed, ".1",sep="")
+
+
+# Combine the count data and the sequence ID
+CountDat <- cbind(SeqID, NucCount(SeqDat$Sequence))
+
+# Creates a new column of the GC Count data as well as calculating the percent GC
+CountDat <- CountDat %>%
+  mutate(GCPercent = ((CCount + GCount) / (ACount + TCount + CCount + GCount))*100)
+
+CountDat
+
+GCTab <- data.frame(SeqID, CountDat$GCPercent)
+
+# Fix the names of the columns
+colnames(GCTab) <- c("Sequence ID","GC %")
+
+GCTab
+```
+
+
+Here is a picture of the Organism *Borrelia burgdorferi* and a link to its wikipedia page https://en.wikipedia.org/wiki/Borrelia_burgdorferi
+
+![Borrelia burgdorferi Bacteria](./Borrelia_burgdorferi_(CDC-PHIL_-6631)_lores.jpg)

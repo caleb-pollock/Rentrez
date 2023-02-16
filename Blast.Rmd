@@ -1,0 +1,28 @@
+---
+title: "Blast Sequencing"
+author: "Caleb Pollock"
+date: '2023-02-16'
+output: html_document
+---
+
+```{r}
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("annotate")
+library(annotate)
+```
+
+```{r}
+SequenceA <- "GCCTGATGGAGGGGGATAACTACTGGAAACGGTAGCTAATACCGCATGAC
+              CTCGCAAGAGCAAAGTGGGGGACCTTAGGGCCTCACGCCATCGGATGAAC
+              CCAGATGGGATTAGCTAGTAGGTGGGGTAATGGCTCACCTAGGCGACGAT
+              CCCTAGCTGGTCTGAGAGGATGACCAGCCACACTGGAACTGAGACACGGT
+              CCAGACTCCTACGGGAGGCAGCAGTGGGGAATATTGCACAATGGGCGCAA"
+```
+
+```{r}
+blast_results <- blastSequences(SequenceA, database = "nt", 
+                                 timeout = 180, hitListSize = 10)
+```
+
+This sequence of DNA appears to be from an organism known to cause Scarlet Fever. The clinician should be worried based on the similarity between the genetic sequences as this disease can be dangerous.

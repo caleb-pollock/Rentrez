@@ -26,4 +26,4 @@ print(Sequences)
 Sequences$Sequence <- gsub("\n", "",Sequences$Sequence)
 print(Sequences)
 
-write.csv(Sequences, file = "Sequences.csv")
+write.csv(Sequences, file = "Sequences.csv", row.names = FALSE)

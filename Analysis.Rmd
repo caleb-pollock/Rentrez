@@ -5,6 +5,8 @@ date: '2023-02-16'
 output: html_document
 ---
 
+https://github.com/caleb-pollock/Rentrez
+
 ```{r}
 library(dplyr)
 
